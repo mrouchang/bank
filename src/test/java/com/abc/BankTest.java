@@ -40,6 +40,9 @@ public class BankTest {
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    /*
+     * New MAXI_SAVING calculation per new feature req.
+     */
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
@@ -47,8 +50,9 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
+        checkingAccount.withdraw(2000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

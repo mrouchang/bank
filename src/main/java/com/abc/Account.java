@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Account {
 
@@ -56,14 +57,23 @@ public class Account {
 			//                if (amount <= 4000)
 			//                    return 20;
 		case MAXI_SAVINGS:
-			if (amount <= 1000)
+			/*if (amount <= 1000)
 				return amount * 0.02;
 			if (amount <= 2000)
 				return 20 + (amount-1000) * 0.05;
-			return 70 + (amount-2000) * 0.1;
+			return 70 + (amount-2000) * 0.1;*/
+			return calcualteMaxieSaving();
 		default:
 			return amount * 0.001;
 		}
+	}
+	
+	public double calcualteMaxieSaving() {
+		double amount = sumTransactions();
+		if (transactions.stream().anyMatch(transaction->transaction.withdrawInTheLastTenDays())) {
+			return amount * 0.001;
+		} 
+		return amount * 0.05;
 	}
 
 	public double sumTransactions() {
