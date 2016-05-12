@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 
@@ -32,6 +33,22 @@ public class Customer {
         for (Account a : accounts)
             total += a.interestEarned();
         return total;
+    }
+    
+    // we only test to see if two accounts are valid and if the amount transfered makes sense.
+    // we dont check for account types. we assume transfer could happen amongst all account types.
+    public synchronized void transfer(Account from, Account to, double amt) throws Exception {
+    	if (amt < 0.0) {
+    		throw new Exception("Transfer amount has to be greater than 0.0.");
+    	}
+    	Account fromAcct = accounts.stream().filter(acct -> acct.equals(from)).collect(Collectors.toList()).get(0);
+    	Account toAcct = accounts.stream().filter(acct -> acct.equals(to)).collect(Collectors.toList()).get(0);
+    	if (fromAcct == null || toAcct == null) {
+    		throw new Exception("Invalid account");
+    	}
+
+    	fromAcct.withdraw(amt);
+    	toAcct.deposit(amt);
     }
 
     public String getStatement() {

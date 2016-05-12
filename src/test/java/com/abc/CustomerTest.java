@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.sql.Savepoint;
+
 public class CustomerTest {
 
     @Test //Test customer statement generation
@@ -33,6 +35,36 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    /*
+     * Statement for Oscar
+	 * Savings Account
+     * deposit $5,000.00
+     * withdrawal $500.00
+     * Total $4,500.00
+
+     * Checking Account
+     * deposit $1,000.00
+     * deposit $500.00
+     * Total $1,500.00
+     * Total In All Accounts $6,000.00
+     */
+    @Test
+    public void testTransfer() throws Exception {
+    	Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+        savingsAccount.deposit(5000.0);
+        checkingAccount.deposit(1000.0);
+    	Customer oscar = 
+    			 new Customer("Oscar").openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        assertEquals(2, oscar.getNumberOfAccounts());
+        
+        oscar.transfer(savingsAccount, checkingAccount, 500.0);
+        
+        System.out.println(oscar.getStatement());       
+    }
+    
+    
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
